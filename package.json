@@ -1,0 +1,19 @@
+{
+  "name": "card-game-score-tracker",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "build": "tsc",
+    "lint": "eslint \"**/*.{ts,js}\"",
+    "test": "jest",
+    "start": "npm run build && npm run lint && npx http-server . -p 8080 -c-1"
+  },
+  "devDependencies": {
+    "@types/jest": "^30.0.0",
+    "@typescript-eslint/eslint-plugin": "^8.57.0",
+    "@typescript-eslint/parser": "^8.57.0",
+    "eslint": "^10.0.3",
+    "jest": "^30.3.0",
+    "ts-jest": "^29.4.6"
+  }
+}

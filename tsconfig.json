@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "target": "es6",
+    "module": "es2020",
+    "moduleResolution": "node",
+    "outDir": "./",
+    "strict": true,
+    "esModuleInterop": true,
+    "lib": ["es2015", "dom"]
+  },
+  "include": ["./**/*.ts"],
+  "exclude": ["**/*.test.ts"]
+}
