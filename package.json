@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "build": "tsc && copyfiles ./src/*.html build/ && copyfiles ./src/*.css build/",
+    "build": "tsc && copyfiles -u 1 ./src/*.html build/ && copyfiles -u 1 ./src/*.css build/",
     "lint": "eslint \"**/*.{ts,js}\"",
     "test": "jest",
     "start": "npm run build && npm run lint && npx http-server . -p 8080 -c-1"
