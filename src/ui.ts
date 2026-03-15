@@ -1,5 +1,5 @@
-import { players, roundTypes, createPlayer } from "./state";
-import { calculateScore, getMaxPoints, getWildCardCount } from "./score";
+import { players, roundTypes, createPlayer } from "./state.js";
+import { calculateScore, getMaxPoints, getWildCardCount } from "./score.js";
 
 const playerForm = document.getElementById(
   "player-form",

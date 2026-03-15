@@ -1,4 +1,4 @@
-import { Player, RoundType } from "./types";
+import { Player, RoundType } from "./types.js";
 
 export const ROUND_TYPES: RoundType[] = [
   "sets",
