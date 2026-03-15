@@ -1,0 +1,65 @@
+body {
+  font-family: Arial, sans-serif;
+  background: #f4f4f4;
+  margin: 0;
+  padding: 0;
+}
+
+h1 {
+  text-align: center;
+  margin-top: 20px;
+}
+
+#scoreboard-container {
+  max-width: 95vw;
+  margin: 30px auto;
+  background: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  overflow-x: auto;
+}
+
+#player-form {
+  display: flex;
+  margin-bottom: 20px;
+}
+
+#scoreboard {
+  width: max-content;
+  min-width: 700px;
+}
+
+#scoreboard th,
+#scoreboard td {
+  white-space: nowrap;
+}
+
+#scoreboard input[type="number"] {
+  width: 4ch;
+}
+
+#player-input {
+  flex: 1;
+  padding: 8px;
+  font-size: 16px;
+}
+
+#player-form button {
+  padding: 8px 16px;
+  font-size: 16px;
+  margin-left: 8px;
+}
+
+#scoreboard {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+}
+
+#scoreboard th,
+#scoreboard td {
+  border: 1px solid #ccc;
+  padding: 8px;
+  text-align: center;
+}

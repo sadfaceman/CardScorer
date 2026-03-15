@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Card Game Score Tracker</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <h1>Card Game Score Tracker</h1>
+    <div id="scoreboard-container">
+      <div
+        id="wildcard-info"
+        style="margin-bottom: 1em; font-weight: bold"
+      ></div>
+      <form id="player-form">
+        <input type="text" id="player-input" placeholder="Add player name" />
+        <button type="submit">Add Player</button>
+      </form>
+      <table id="scoreboard">
+        <thead>
+          <tr id="header-row">
+            <th>Round</th>
+          </tr>
+        </thead>
+        <tbody id="score-rows"></tbody>
+      </table>
+    </div>
+    <script type="module" src="main.js?v=1"></script>
+  </body>
+</html>
