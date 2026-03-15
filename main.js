@@ -1,2 +1,2 @@
-import { init } from "./ui";
+import { init } from "./ui.js";
 init();
