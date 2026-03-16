@@ -25,20 +25,6 @@ h1 {
   margin-bottom: 20px;
 }
 
-#scoreboard {
-  width: max-content;
-  min-width: 700px;
-}
-
-#scoreboard th,
-#scoreboard td {
-  white-space: nowrap;
-}
-
-#scoreboard input[type="number"] {
-  width: 4ch;
-}
-
 #player-input {
   flex: 1;
   padding: 8px;
@@ -52,7 +38,7 @@ h1 {
 }
 
 #scoreboard {
-  width: 100%;
+  width: 100%; /* Full width for responsiveness */
   border-collapse: collapse;
   margin-bottom: 20px;
 }
@@ -62,4 +48,33 @@ h1 {
   border: 1px solid #ccc;
   padding: 8px;
   text-align: center;
+  white-space: nowrap; /* Keep the inputs on one line */
+}
+
+#scoreboard input[type="number"] {
+  width: 4ch; /* Fixed width */
+  max-width: 60px; /* Set a max width for flexibility */
+}
+
+@media (max-width: 600px) {
+  #scoreboard {
+    display: block; /* Stack table on smaller screens */
+    overflow-x: auto; /* Allow horizontal scroll */
+  }
+
+  #scoreboard th,
+  #scoreboard td {
+    display: block; /* Stack table data vertically */
+    text-align: left; /* Left align for better readability */
+    padding: 10px 0; /* Adjust padding */
+  }
+
+  #scoreboard th {
+    background: #f4f4f4; /* Highlight header */
+  }
+
+  /* Adjust input field appearance */
+  #scoreboard input[type="number"] {
+    width: 50px; /* Slightly larger and more readable */
+  }
 }

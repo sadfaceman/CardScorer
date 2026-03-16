@@ -66,9 +66,9 @@ function updateScoreboard() {
       const max = playerMax !== undefined ? `max="${playerMax}"` : "";
 
       if (roundType === "pilling") {
-        row.innerHTML += `<td><input type="number" value="${score}" min="0" ${max} data-player="${idx}" data-round="${r}" style="width:40px" /> <label>Finish order:</label> <input type="number" value="${finishOrder}" min="0" max="${players.length - 1}" data-player="${idx}" data-round="${r}" class="finish-order-input" style="width:40px" tabindex="0" /></td>`;
+        row.innerHTML += `<td><div><input type="number" value="${score}" min="0" ${max} data-player="${idx}" data-round="${r}" style="width:40px" /> <label>Finish order:</label> <input type="number" value="${finishOrder}" min="0" max="${players.length}" data-player="${idx}" data-round="${r}" class="finish-order-input" style="width:40px" tabindex="0" /></td>`;
       } else {
-        row.innerHTML += `<td><input type="number" value="${score}" min="0" ${max} data-player="${idx}" data-round="${r}" style="width:60px" /></td>`;
+        row.innerHTML += `<td><div><input type="number" value="${score}" min="0" ${max} data-player="${idx}" data-round="${r}" style="width:60px" /></div></td>`;
       }
     });
 
