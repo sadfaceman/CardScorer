@@ -8,7 +8,7 @@ function updateHeader() {
     if (!headerRow) {
         return;
     }
-    headerRow.innerHTML = "<th>Round</th>";
+    headerRow.innerHTML = "<th>R</th>";
     players.forEach((p) => {
         headerRow.innerHTML += `<th>${p.name}</th>`;
     });
@@ -36,18 +36,17 @@ function updateScoreboard() {
         if (maxPoints !== Infinity && roundSum > maxPoints) {
             row.style.backgroundColor = "#ffcccc"; // light red
         }
-        row.innerHTML = `<td>${r + 1} (${roundType})</td>`;
+        row.innerHTML = `<td title="${roundType}">${r + 1}</td>`;
         players.forEach((p, idx) => {
             const score = p.scores[r] || 0;
-            const finishOrder = p.finishOrders[r] || 0;
             const otherSum = roundSum - score;
             const playerMax = maxPoints !== Infinity ? Math.max(0, maxPoints - otherSum) : undefined;
             const max = playerMax !== undefined ? `max="${playerMax}"` : "";
-            if (roundType === "pilling") {
-                row.innerHTML += `<td><div><input type="number" value="${score}" min="0" ${max} data-player="${idx}" data-round="${r}" style="width:40px" /> <label>Finish order:</label> <input type="number" value="${finishOrder}" min="0" max="${players.length}" data-player="${idx}" data-round="${r}" class="finish-order-input" style="width:40px" tabindex="0" /></td>`;
+            if (roundType === "finishorder") {
+                row.innerHTML += `<td><div><input type="number" value="${score}" min="0" max="${players.length}" data-player="${idx}" data-round="${r}" class="finish-order-input" tabindex="0" /></div></td>`;
             }
             else {
-                row.innerHTML += `<td><div><input type="number" value="${score}" min="0" ${max} data-player="${idx}" data-round="${r}" style="width:60px" /></div></td>`;
+                row.innerHTML += `<td><div><input type="number" value="${score}" min="0" ${max} data-player="${idx}" data-round="${r}" /></div></td>`;
             }
         });
         scoreRows.appendChild(row);
@@ -55,11 +54,11 @@ function updateScoreboard() {
     // Totals row
     if (players.length > 0) {
         const totalRow = document.createElement("tr");
-        totalRow.innerHTML = "<td><b>Total</b></td>";
+        totalRow.innerHTML = "<td><b>T</b></td>";
         players.forEach((p) => {
             const total = p.scores.reduce((sum, score, r) => {
                 const roundType = roundTypes[r] || "";
-                const finishOrder = p.finishOrders[r] || 0;
+                const finishOrder = p.scores[7] || 0;
                 return sum + calculateScore(roundType, score, finishOrder);
             }, 0);
             totalRow.innerHTML += `<td><b>${total}</b></td>`;
@@ -96,7 +95,7 @@ function setupEventListeners() {
             const roundIdx = parseInt(target.dataset.round, 10);
             const value = parseInt(target.value, 10) || 0;
             if (target.classList.contains("finish-order-input")) {
-                players[playerIdx].finishOrders[roundIdx] = value;
+                players[playerIdx].scores[7] = value;
             }
             else {
                 players[playerIdx].scores[roundIdx] = value;
