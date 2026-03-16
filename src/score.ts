@@ -25,6 +25,8 @@ export function calculateScore(
       }
       return score;
     }
+    case "finishorder":
+      return 0; // Finish order is handled separately in the UI
     default:
       return value;
   }

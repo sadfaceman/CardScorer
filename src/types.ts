@@ -5,10 +5,10 @@ export type RoundType =
   | "queens"
   | "special"
   | "lastset"
-  | "pilling";
+  | "pilling"
+  | "finishorder";
 
 export interface Player {
   name: string;
   scores: number[];
-  finishOrders: number[];
 }

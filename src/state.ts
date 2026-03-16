@@ -8,6 +8,7 @@ export const ROUND_TYPES: RoundType[] = [
   "special",
   "lastset",
   "pilling",
+  "finishorder",
 ];
 
 export const roundTypes: RoundType[] = [...ROUND_TYPES];
@@ -19,6 +20,5 @@ export function createPlayer(name: string): Player {
   return {
     name,
     scores: Array.from({ length: roundCount }, () => 0),
-    finishOrders: Array.from({ length: roundCount }, () => 0),
   };
 }
