@@ -1,3 +1,7 @@
+* {
+  box-sizing: border-box;
+}
+
 body {
   font-family: Arial, sans-serif;
   background: #f4f4f4;
@@ -7,74 +11,134 @@ body {
 
 h1 {
   text-align: center;
-  margin-top: 20px;
+  margin: 20px auto;
+  font-size: clamp(1.5rem, 2.5vw, 2.25rem);
 }
 
 #scoreboard-container {
-  max-width: 95vw;
-  margin: 30px auto;
+  width: min(100%, 960px);
+  margin: 20px auto;
   background: #fff;
   padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  overflow-x: auto;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
 }
 
 #player-form {
   display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
   margin-bottom: 20px;
 }
 
 #player-input {
   flex: 1;
-  padding: 8px;
+  min-width: 0;
+  padding: 10px 12px;
   font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
 }
 
-#player-form button {
-  padding: 8px 16px;
+#player-form button,
+#calculate-button {
+  padding: 10px 18px;
   font-size: 16px;
-  margin-left: 8px;
+  border: none;
+  border-radius: 8px;
+  background: #0078d4;
+  color: #fff;
+  cursor: pointer;
+}
+
+#player-form button:hover,
+#calculate-button:hover {
+  background: #005ea6;
 }
 
 #scoreboard {
-  width: 100%; /* Full width for responsiveness */
+  width: 100%;
   border-collapse: collapse;
   margin-bottom: 20px;
+  min-width: 600px;
 }
 
 #scoreboard th,
 #scoreboard td {
   border: 1px solid #ccc;
-  padding: 8px;
+  padding: 10px 12px;
   text-align: center;
-  white-space: nowrap; /* Keep the inputs on one line */
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+#scoreboard thead th {
+  background: #f7f7f7;
+  font-weight: 600;
+}
+
+#scoreboard tbody tr:nth-child(even) {
+  background: #fafafa;
 }
 
 #scoreboard input[type="number"] {
-  width: 4ch; /* Fixed width */
-  max-width: 60px; /* Set a max width for flexibility */
+  width: 4ch;
+  min-width: 4ch;
+  max-width: 80px;
+  padding: 6px 8px;
+  border: 1px solid #bbb;
+  border-radius: 6px;
+  font-size: 1rem;
+  appearance: textfield;
+  -moz-appearance: textfield;
 }
 
-@media (max-width: 600px) {
+#scoreboard input[type="number"]::-webkit-outer-spin-button,
+#scoreboard input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+@media (max-width: 720px) {
+  #scoreboard-container {
+    padding: 16px;
+    overflow-x: auto;
+  }
+
+  #player-form {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  #player-form button,
+  #calculate-button {
+    width: 100%;
+  }
+
   #scoreboard {
-    display: block; /* Stack table on smaller screens */
-    overflow-x: auto; /* Allow horizontal scroll */
+    min-width: 100%;
   }
 
   #scoreboard th,
   #scoreboard td {
-    display: block; /* Stack table data vertically */
-    text-align: left; /* Left align for better readability */
-    padding: 10px 0; /* Adjust padding */
+    white-space: normal;
+    overflow-wrap: break-word;
   }
 
-  #scoreboard th {
-    background: #f4f4f4; /* Highlight header */
-  }
-
-  /* Adjust input field appearance */
   #scoreboard input[type="number"] {
-    width: 50px; /* Slightly larger and more readable */
+    width: 100%;
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 520px) {
+  #scoreboard {
+    min-width: 520px;
+  }
+
+  #scoreboard th,
+  #scoreboard td {
+    padding: 10px;
   }
 }
