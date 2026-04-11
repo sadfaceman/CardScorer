@@ -13,6 +13,9 @@ const headerRow = document.getElementById(
 const scoreRows = document.getElementById(
   "score-rows",
 ) as HTMLTableSectionElement | null;
+const calculateButton = document.getElementById(
+  "calculate-button",
+) as HTMLButtonElement | null;
 
 function updateHeader() {
   if (!headerRow) {
@@ -115,7 +118,7 @@ function setupEventListeners() {
     });
   }
 
-  // Keep the scoreboard responsive without re-attaching listeners on every refresh
+  // Keep stored values in state; recalc only when the calculate button is pressed.
   if (scoreRows) {
     scoreRows.addEventListener("change", (event) => {
       const target = event.target as HTMLInputElement;
@@ -132,7 +135,11 @@ function setupEventListeners() {
       } else {
         players[playerIdx].scores[roundIdx] = value;
       }
+    });
+  }
 
+  if (calculateButton) {
+    calculateButton.addEventListener("click", () => {
       updateScoreboard();
     });
   }
