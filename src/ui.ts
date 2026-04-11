@@ -16,11 +16,74 @@ const scoreRows = document.getElementById(
 const calculateButton = document.getElementById(
   "calculate-button",
 ) as HTMLButtonElement | null;
+const resetButton = document.getElementById(
+  "reset-button",
+) as HTMLButtonElement | null;
+
+const SESSION_KEY = "card-scorer-session";
+
+function saveState() {
+  try {
+    window.sessionStorage.setItem(SESSION_KEY, JSON.stringify(players));
+  } catch {
+    // Ignore storage errors.
+  }
+}
+
+function clearStoredState() {
+  try {
+    window.sessionStorage.removeItem(SESSION_KEY);
+  } catch {
+    // Ignore storage errors.
+  }
+}
+
+function loadStoredState() {
+  try {
+    const stored = window.sessionStorage.getItem(SESSION_KEY);
+    if (!stored) {
+      return;
+    }
+
+    const data = JSON.parse(stored) as Array<unknown>;
+    if (!Array.isArray(data)) {
+      return;
+    }
+
+    players.splice(0, players.length);
+
+    data.forEach((item) => {
+      if (
+        typeof item !== "object" ||
+        item === null ||
+        typeof (item as any).name !== "string" ||
+        !Array.isArray((item as any).scores)
+      ) {
+        return;
+      }
+
+      const scores = (item as any).scores.map((value: unknown) =>
+        typeof value === "number" ? value : Number(value) || 0,
+      );
+      const normalizedScores = Array.from({ length: roundTypes.length }, (_, idx) =>
+        scores[idx] || 0,
+      );
+
+      players.push({
+        name: (item as any).name,
+        scores: normalizedScores,
+      });
+    });
+  } catch {
+    // Ignore invalid stored data.
+  }
+}
 
 function updateHeader() {
   if (!headerRow) {
     return;
   }
+
   headerRow.innerHTML = "<th>R</th>";
   players.forEach((p) => {
     headerRow.innerHTML += `<th>${p.name}</th>`;
@@ -52,9 +115,8 @@ function updateScoreboard() {
     const maxPoints = getMaxPoints(r, players.length);
     const roundSum = players.reduce((sum, p) => sum + (p.scores[r] || 0), 0);
 
-    // Highlight row if rund is overallocated
     if (maxPoints !== Infinity && roundSum > maxPoints) {
-      row.style.backgroundColor = "#ffcccc"; // light red
+      row.style.backgroundColor = "#ffcccc";
     }
 
     row.innerHTML = `<td title="${roundType}">${r + 1}</td>`;
@@ -77,7 +139,6 @@ function updateScoreboard() {
     scoreRows.appendChild(row);
   }
 
-  // Totals row
   if (players.length > 0) {
     const totalRow = document.createElement("tr");
     totalRow.innerHTML = "<td><b>T</b></td>";
@@ -94,6 +155,14 @@ function updateScoreboard() {
 
     scoreRows.appendChild(totalRow);
   }
+}
+
+function resetGame() {
+  players.splice(0, players.length);
+  clearStoredState();
+  updateHeader();
+  updateScoreboard();
+  updateWildCardDisplay();
 }
 
 function setupEventListeners() {
@@ -115,10 +184,10 @@ function setupEventListeners() {
       updateHeader();
       updateScoreboard();
       updateWildCardDisplay();
+      saveState();
     });
   }
 
-  // Keep stored values in state; recalc only when the calculate button is pressed.
   if (scoreRows) {
     scoreRows.addEventListener("change", (event) => {
       const target = event.target as HTMLInputElement;
@@ -135,6 +204,8 @@ function setupEventListeners() {
       } else {
         players[playerIdx].scores[roundIdx] = value;
       }
+
+      saveState();
     });
   }
 
@@ -143,9 +214,18 @@ function setupEventListeners() {
       updateScoreboard();
     });
   }
+
+  if (resetButton) {
+    resetButton.addEventListener("click", () => {
+      resetGame();
+    });
+  }
 }
 
 export function init() {
-  setupEventListeners();
+  loadStoredState();
+  updateHeader();
+  updateScoreboard();
   updateWildCardDisplay();
+  setupEventListeners();
 }
