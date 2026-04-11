@@ -4,6 +4,55 @@ const playerForm = document.getElementById("player-form");
 const playerInput = document.getElementById("player-input");
 const headerRow = document.getElementById("header-row");
 const scoreRows = document.getElementById("score-rows");
+const calculateButton = document.getElementById("calculate-button");
+const resetButton = document.getElementById("reset-button");
+const SESSION_KEY = "card-scorer-session";
+function saveState() {
+    try {
+        window.sessionStorage.setItem(SESSION_KEY, JSON.stringify(players));
+    }
+    catch (_a) {
+        // Ignore storage errors.
+    }
+}
+function clearStoredState() {
+    try {
+        window.sessionStorage.removeItem(SESSION_KEY);
+    }
+    catch (_a) {
+        // Ignore storage errors.
+    }
+}
+function loadStoredState() {
+    try {
+        const stored = window.sessionStorage.getItem(SESSION_KEY);
+        if (!stored) {
+            return;
+        }
+        const data = JSON.parse(stored);
+        if (!Array.isArray(data)) {
+            return;
+        }
+        players.splice(0, players.length);
+        data.forEach((item) => {
+            if (typeof item !== "object" ||
+                item === null ||
+                typeof item.name !== "string" ||
+                !Array.isArray(item.scores)) {
+                return;
+            }
+            const scores = item.scores.map((value) => typeof value === "number" ? value : Number(value) || 0);
+            const normalizedScores = Array.from({ length: roundTypes.length }, (_, idx) => scores[idx] || 0);
+            players.push({
+                name: item.name,
+                scores: normalizedScores,
+            });
+        });
+    }
+    catch (_a) {
+        // Ignore invalid stored data.
+    }
+}
 function updateHeader() {
     if (!headerRow) {
         return;
@@ -32,9 +81,8 @@ function updateScoreboard() {
         const roundType = roundTypes[r] || "";
         const maxPoints = getMaxPoints(r, players.length);
         const roundSum = players.reduce((sum, p) => sum + (p.scores[r] || 0), 0);
-        // Highlight row if rund is overallocated
         if (maxPoints !== Infinity && roundSum > maxPoints) {
-            row.style.backgroundColor = "#ffcccc"; // light red
+            row.style.backgroundColor = "#ffcccc";
         }
         row.innerHTML = `<td title="${roundType}">${r + 1}</td>`;
         players.forEach((p, idx) => {
@@ -51,7 +99,6 @@ function updateScoreboard() {
         });
         scoreRows.appendChild(row);
     }
-    // Totals row
     if (players.length > 0) {
         const totalRow = document.createElement("tr");
         totalRow.innerHTML = "<td><b>T</b></td>";
@@ -65,6 +112,13 @@ function updateScoreboard() {
         });
         scoreRows.appendChild(totalRow);
     }
+}
+function resetGame() {
+    players.splice(0, players.length);
+    clearStoredState();
+    updateHeader();
+    updateScoreboard();
+    updateWildCardDisplay();
 }
 function setupEventListeners() {
     if (playerForm) {
@@ -82,9 +136,9 @@ function setupEventListeners() {
             updateHeader();
             updateScoreboard();
             updateWildCardDisplay();
+            saveState();
         });
     }
-    // Keep the scoreboard responsive without re-attaching listeners on every refresh
     if (scoreRows) {
         scoreRows.addEventListener("change", (event) => {
             const target = event.target;
@@ -100,11 +154,24 @@ function setupEventListeners() {
             else {
                 players[playerIdx].scores[roundIdx] = value;
             }
+            saveState();
+        });
+    }
+    if (calculateButton) {
+        calculateButton.addEventListener("click", () => {
             updateScoreboard();
+        });
+    }
+    if (resetButton) {
+        resetButton.addEventListener("click", () => {
+            resetGame();
         });
     }
 }
 export function init() {
-    setupEventListeners();
+    loadStoredState();
+    updateHeader();
+    updateScoreboard();
     updateWildCardDisplay();
+    setupEventListeners();
 }
