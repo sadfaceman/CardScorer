@@ -65,8 +65,9 @@ function loadStoredState() {
       const scores = (item as any).scores.map((value: unknown) =>
         typeof value === "number" ? value : Number(value) || 0,
       );
-      const normalizedScores = Array.from({ length: roundTypes.length }, (_, idx) =>
-        scores[idx] || 0,
+      const normalizedScores = Array.from(
+        { length: roundTypes.length },
+        (_, idx) => scores[idx] || 0,
       );
 
       players.push({
@@ -101,6 +102,17 @@ function updateWildCardDisplay() {
     wildCount > 0 ? `Wild cards to add: ${wildCount}` : "No wild cards needed.";
 }
 
+const ROUND_LABELS: Record<string, string> = {
+  sets: "Sets",
+  clubs: "Clubs",
+  facecards: "Face",
+  queens: "Ladies",
+  special: "King of Clubs / Ace of Spades",
+  lastset: "Last",
+  pilling: "Solitaire",
+  finishorder: "# Pass",
+};
+
 function updateScoreboard() {
   if (!scoreRows) {
     return;
@@ -111,6 +123,7 @@ function updateScoreboard() {
   for (let r = 0; r < roundTypes.length; r++) {
     const row = document.createElement("tr");
     const roundType = roundTypes[r] || "";
+    const roundLabel = ROUND_LABELS[roundType] || `Round ${r + 1}`;
 
     const maxPoints = getMaxPoints(r, players.length);
     const roundSum = players.reduce((sum, p) => sum + (p.scores[r] || 0), 0);
@@ -119,7 +132,7 @@ function updateScoreboard() {
       row.style.backgroundColor = "#ffcccc";
     }
 
-    row.innerHTML = `<td title="${roundType}">${r + 1}</td>`;
+    row.innerHTML = `<td title="${roundType}">${roundLabel}</td>`;
 
     players.forEach((p, idx) => {
       const score = p.scores[r] || 0;
