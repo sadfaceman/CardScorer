@@ -71,6 +71,16 @@ function updateWildCardDisplay() {
     wildCardInfo.textContent =
         wildCount > 0 ? `Wild cards to add: ${wildCount}` : "No wild cards needed.";
 }
+const ROUND_LABELS = {
+    sets: "Sets",
+    clubs: "Clubs",
+    facecards: "Face",
+    queens: "Ladies",
+    special: "King of Clubs / Ace of Spades",
+    lastset: "Last",
+    pilling: "Solitaire",
+    finishorder: "# Pass",
+};
 function updateScoreboard() {
     if (!scoreRows) {
         return;
@@ -79,12 +89,13 @@ function updateScoreboard() {
     for (let r = 0; r < roundTypes.length; r++) {
         const row = document.createElement("tr");
         const roundType = roundTypes[r] || "";
+        const roundLabel = ROUND_LABELS[roundType] || `Round ${r + 1}`;
         const maxPoints = getMaxPoints(r, players.length);
         const roundSum = players.reduce((sum, p) => sum + (p.scores[r] || 0), 0);
         if (maxPoints !== Infinity && roundSum > maxPoints) {
             row.style.backgroundColor = "#ffcccc";
         }
-        row.innerHTML = `<td title="${roundType}">${r + 1}</td>`;
+        row.innerHTML = `<td title="${roundType}">${roundLabel}</td>`;
         players.forEach((p, idx) => {
             const score = p.scores[r] || 0;
             const otherSum = roundSum - score;
