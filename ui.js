@@ -78,8 +78,8 @@ const ROUND_LABELS = {
     queens: "Ladies",
     special: "King of Clubs / Ace of Spades",
     lastset: "Last",
-    pilling: "Solitaire",
-    finishorder: "# Pass",
+    pilling: "# Pass",
+    finishorder: "Solitaire",
 };
 function updateScoreboard() {
     if (!scoreRows) {
