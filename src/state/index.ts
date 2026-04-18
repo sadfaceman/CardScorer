@@ -1,15 +1,5 @@
-import { Player, RoundType } from "./types.js";
-
-export const ROUND_TYPES: RoundType[] = [
-  "sets",
-  "clubs",
-  "facecards",
-  "queens",
-  "special",
-  "lastset",
-  "pilling",
-  "finishorder",
-];
+import { Player, RoundType } from "../types/index.js";
+import { ROUND_TYPES } from "../constants/game.js";
 
 export const roundTypes: RoundType[] = [...ROUND_TYPES];
 export const roundCount = ROUND_TYPES.length;

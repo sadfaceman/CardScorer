@@ -1,4 +1,4 @@
-import { calculateScore, getWildCardCount } from "./score";
+import { calculateScore, getWildCardCount } from "./index";
 
 describe("calculateScore", () => {
   it("should calculate sets and clubs correctly", () => {

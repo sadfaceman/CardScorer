@@ -1,4 +1,4 @@
-import { RoundType } from "./types.js";
+import { RoundType } from "../types/index.js";
 
 export function calculateScore(
   roundType: RoundType,
