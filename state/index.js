@@ -1,13 +1,4 @@
-export const ROUND_TYPES = [
-    "sets",
-    "clubs",
-    "facecards",
-    "queens",
-    "special",
-    "lastset",
-    "pilling",
-    "finishorder",
-];
+import { ROUND_TYPES } from "../constants/game.js";
 export const roundTypes = [...ROUND_TYPES];
 export const roundCount = ROUND_TYPES.length;
 export const players = [];
