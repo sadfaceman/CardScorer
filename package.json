@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "build": "tsc --project tsconfig.build.json && xcopy src\\assets\\* build\\ /Y",
+    "build": "tsc --project tsconfig.build.json && copyfiles -u 1 src/assets/* build/",
     "dev": "tsc --watch --project tsconfig.build.json & npx http-server ./build -p 8080 -c-1",
     "lint": "eslint \"**/*.{ts,js}\"",
     "test": "jest",
