@@ -1,5 +1,5 @@
 import { players, roundTypes } from "../state/index.js";
-import { calculateScore, getMaxPoints, getWildCardCount, getMissingPoints, hasDuplicateFinishOrder, } from "../score/index.js";
+import { calculateScore, getMaxPoints, getWildCardCount, getMissingPoints, hasDuplicateFinishOrder, hasExcessiveRoundPoints, } from "../score/index.js";
 import { ROUND_LABELS } from "./constants.js";
 const headerRow = document.getElementById("header-row");
 const scoreRows = document.getElementById("score-rows");
@@ -71,6 +71,22 @@ export function displayMissingPoints() {
     }
     container.innerHTML = "";
     let hasMissingPoints = false;
+    // Check for excessive points in each round
+    for (let r = 0; r < roundTypes.length; r++) {
+        const roundSum = players.reduce((sum, p) => sum + (p.scores[r] || 0), 0);
+        const isExcessive = hasExcessiveRoundPoints(r, roundSum, players.length);
+        if (isExcessive) {
+            hasMissingPoints = true;
+            const roundType = roundTypes[r] || "";
+            const roundLabel = ROUND_LABELS[roundType] || `Round ${r + 1}`;
+            const maxPoints = getMaxPoints(r, players.length);
+            const p = document.createElement("p");
+            p.innerHTML = `<strong>${roundLabel}:</strong> ${roundSum} point${roundSum > 1 ? "s" : ""} provided, but maximum is ${maxPoints}`;
+            p.style.margin = "0.5em 0";
+            p.style.color = "#d9534f";
+            container.appendChild(p);
+        }
+    }
     // Check for missing points in each round
     for (let r = 0; r < roundTypes.length; r++) {
         const roundSum = players.reduce((sum, p) => sum + (p.scores[r] || 0), 0);
