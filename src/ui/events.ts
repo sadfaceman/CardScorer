@@ -1,5 +1,10 @@
 import { players, createPlayer } from "../state/index.js";
-import { updateHeader, updateScoreboard, updateWildCardDisplay } from "./render.js";
+import {
+  updateHeader,
+  updateScoreboard,
+  updateWildCardDisplay,
+  displayMissingPoints,
+} from "./render.js";
 import { saveState, clearStoredState } from "../state/storage.js";
 
 const playerForm = document.getElementById(
@@ -73,6 +78,7 @@ export function setupEventListeners() {
   if (calculateButton) {
     calculateButton.addEventListener("click", () => {
       updateScoreboard();
+      displayMissingPoints();
     });
   }
 

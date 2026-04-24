@@ -169,3 +169,20 @@ h1 {
     padding: 10px;
   }
 }
+
+#missing-points-display {
+  background: #f0f0f0;
+  padding: 15px;
+  border-radius: 8px;
+  border-left: 4px solid #d9534f;
+}
+
+#missing-points-display h3 {
+  color: #d9534f;
+  font-size: 1.1rem;
+}
+
+#missing-points-display p {
+  color: #555;
+  line-height: 1.6;
+}

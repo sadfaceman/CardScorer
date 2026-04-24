@@ -1,4 +1,4 @@
-import { RoundType } from "../types/index.js";
+import { RoundType, Player } from "../types/index.js";
 
 export function calculateScore(
   roundType: RoundType,
@@ -60,4 +60,38 @@ export function getMaxPoints(roundIdx: number, playerCount: number): number {
     default:
       return Infinity;
   }
+}
+
+export function getMissingPoints(
+  roundIdx: number,
+  roundSum: number,
+  playerCount: number,
+): number {
+  const maxPoints = getMaxPoints(roundIdx, playerCount);
+  if (maxPoints === Infinity) {
+    return 0;
+  }
+  return Math.max(0, maxPoints - roundSum);
+}
+
+export function hasDuplicateFinishOrder(players: Player[]): {
+  hasDuplicates: boolean;
+  duplicateValues: number[];
+} {
+  const finishOrderValues = players.map((p) => p.scores[7] || 0);
+
+  const seen = new Set<number>();
+  const duplicates = new Set<number>();
+
+  for (const value of finishOrderValues) {
+    if (seen.has(value)) {
+      duplicates.add(value);
+    }
+    seen.add(value);
+  }
+
+  return {
+    hasDuplicates: duplicates.size > 0,
+    duplicateValues: Array.from(duplicates).sort((a, b) => a - b),
+  };
 }
