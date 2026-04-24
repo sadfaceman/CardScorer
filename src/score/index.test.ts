@@ -3,6 +3,7 @@ import {
   getWildCardCount,
   getMissingPoints,
   hasDuplicateFinishOrder,
+  hasExcessiveRoundPoints,
 } from "./index";
 import { Player } from "../types/index";
 
@@ -208,5 +209,71 @@ describe("hasDuplicateFinishOrder", () => {
     const result = hasDuplicateFinishOrder(players);
     expect(result.hasDuplicates).toBe(true);
     expect(result.duplicateValues).toEqual([3, 5]); // Sorted
+  });
+});
+
+describe("hasExcessiveRoundPoints", () => {
+  it("should return false when round sum equals max points", () => {
+    expect(hasExcessiveRoundPoints(0, 13, 4)).toBe(false);
+    expect(hasExcessiveRoundPoints(1, 13, 3)).toBe(false);
+    expect(hasExcessiveRoundPoints(2, 12, 4)).toBe(false);
+  });
+
+  it("should return false when round sum is less than max points", () => {
+    expect(hasExcessiveRoundPoints(0, 5, 4)).toBe(false);
+    expect(hasExcessiveRoundPoints(1, 8, 3)).toBe(false);
+    expect(hasExcessiveRoundPoints(2, 1, 4)).toBe(false);
+  });
+
+  it("should return true when round sum exceeds max points", () => {
+    expect(hasExcessiveRoundPoints(0, 14, 4)).toBe(true);
+    expect(hasExcessiveRoundPoints(1, 20, 3)).toBe(true);
+    expect(hasExcessiveRoundPoints(2, 13, 4)).toBe(true);
+  });
+
+  it("should return false for rounds with infinity max points", () => {
+    expect(hasExcessiveRoundPoints(7, 100, 3)).toBe(false);
+    expect(hasExcessiveRoundPoints(7, 1000, 3)).toBe(false);
+  });
+
+  it("should correctly identify excessive points for all standard rounds", () => {
+    // Test with 4 players
+    const roundData = [
+      { roundIdx: 0, maxSum: 13, playerCount: 4 }, // Round 1 (sets)
+      { roundIdx: 1, maxSum: 13, playerCount: 4 }, // Round 2 (clubs)
+      { roundIdx: 2, maxSum: 12, playerCount: 4 }, // Round 3 (facecards)
+      { roundIdx: 3, maxSum: 4, playerCount: 4 }, // Round 4 (queens)
+      { roundIdx: 4, maxSum: 2, playerCount: 4 }, // Round 5 (special)
+      { roundIdx: 5, maxSum: 1, playerCount: 4 }, // Round 6 (lastset)
+    ];
+
+    roundData.forEach(({ roundIdx, maxSum }) => {
+      // Just under max
+      expect(hasExcessiveRoundPoints(roundIdx, maxSum - 1, 4)).toBe(false);
+      // At max
+      expect(hasExcessiveRoundPoints(roundIdx, maxSum, 4)).toBe(false);
+      // Over max
+      expect(hasExcessiveRoundPoints(roundIdx, maxSum + 1, 4)).toBe(true);
+    });
+  });
+
+  it("should handle edge cases with different player counts", () => {
+    // Round 1 with different player counts
+    const roundIdx = 0;
+    expect(hasExcessiveRoundPoints(roundIdx, 13, 4)).toBe(false); // 4 players: 13 max
+    expect(hasExcessiveRoundPoints(roundIdx, 14, 4)).toBe(true);
+
+    expect(hasExcessiveRoundPoints(roundIdx, 18, 3)).toBe(false); // 3 players: 18 max
+    expect(hasExcessiveRoundPoints(roundIdx, 19, 3)).toBe(true);
+  });
+
+  it("should return false for zero sum even if max is also zero", () => {
+    // Create a hypothetical scenario - usually sum is > 0 after input
+    expect(hasExcessiveRoundPoints(0, 0, 4)).toBe(false);
+  });
+
+  it("should handle very high excess values", () => {
+    expect(hasExcessiveRoundPoints(1, 1000, 3)).toBe(true);
+    expect(hasExcessiveRoundPoints(4, 500, 4)).toBe(true);
   });
 });

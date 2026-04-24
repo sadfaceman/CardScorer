@@ -95,3 +95,15 @@ export function hasDuplicateFinishOrder(players: Player[]): {
     duplicateValues: Array.from(duplicates).sort((a, b) => a - b),
   };
 }
+
+export function hasExcessiveRoundPoints(
+  roundIdx: number,
+  roundSum: number,
+  playerCount: number,
+): boolean {
+  const maxPoints = getMaxPoints(roundIdx, playerCount);
+  if (maxPoints === Infinity) {
+    return false;
+  }
+  return roundSum > maxPoints;
+}
