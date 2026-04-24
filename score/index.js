@@ -53,3 +53,25 @@ export function getMaxPoints(roundIdx, playerCount) {
             return Infinity;
     }
 }
+export function getMissingPoints(roundIdx, roundSum, playerCount) {
+    const maxPoints = getMaxPoints(roundIdx, playerCount);
+    if (maxPoints === Infinity) {
+        return 0;
+    }
+    return Math.max(0, maxPoints - roundSum);
+}
+export function hasDuplicateFinishOrder(players) {
+    const finishOrderValues = players.map((p) => p.scores[7] || 0);
+    const seen = new Set();
+    const duplicates = new Set();
+    for (const value of finishOrderValues) {
+        if (seen.has(value)) {
+            duplicates.add(value);
+        }
+        seen.add(value);
+    }
+    return {
+        hasDuplicates: duplicates.size > 0,
+        duplicateValues: Array.from(duplicates).sort((a, b) => a - b),
+    };
+}

@@ -1,5 +1,5 @@
 import { players, roundTypes } from "../state/index.js";
-import { calculateScore, getMaxPoints, getWildCardCount } from "../score/index.js";
+import { calculateScore, getMaxPoints, getWildCardCount, getMissingPoints, hasDuplicateFinishOrder, } from "../score/index.js";
 import { ROUND_LABELS } from "./constants.js";
 const headerRow = document.getElementById("header-row");
 const scoreRows = document.getElementById("score-rows");
@@ -62,5 +62,44 @@ export function updateScoreboard() {
             totalRow.innerHTML += `<td><b>${total}</b></td>`;
         });
         scoreRows.appendChild(totalRow);
+    }
+}
+export function displayMissingPoints() {
+    const container = document.getElementById("missing-points-display");
+    if (!container) {
+        return;
+    }
+    container.innerHTML = "";
+    let hasMissingPoints = false;
+    // Check for missing points in each round
+    for (let r = 0; r < roundTypes.length; r++) {
+        const roundSum = players.reduce((sum, p) => sum + (p.scores[r] || 0), 0);
+        const missingPoints = getMissingPoints(r, roundSum, players.length);
+        if (missingPoints > 0) {
+            hasMissingPoints = true;
+            const roundType = roundTypes[r] || "";
+            const roundLabel = ROUND_LABELS[roundType] || `Round ${r + 1}`;
+            const p = document.createElement("p");
+            p.innerHTML = `<strong>${roundLabel}:</strong> ${missingPoints} point${missingPoints > 1 ? "s" : ""} missing`;
+            p.style.margin = "0.5em 0";
+            p.style.color = "#d9534f";
+            container.appendChild(p);
+        }
+    }
+    // Check for duplicate finish order values
+    const { hasDuplicates, duplicateValues } = hasDuplicateFinishOrder(players);
+    if (hasDuplicates) {
+        hasMissingPoints = true;
+        const p = document.createElement("p");
+        p.innerHTML = `<strong>Finish Order:</strong> Duplicate values not allowed (${duplicateValues.join(", ")})`;
+        p.style.margin = "0.5em 0";
+        p.style.color = "#d9534f";
+        container.appendChild(p);
+    }
+    if (hasMissingPoints) {
+        const header = document.createElement("h3");
+        header.textContent = "Issues Found:";
+        header.style.margin = "1em 0 0.5em 0";
+        container.insertBefore(header, container.firstChild);
     }
 }
