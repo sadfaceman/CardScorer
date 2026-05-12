@@ -2,6 +2,7 @@
   "name": "card-game-score-tracker",
   "version": "0.1.0",
   "private": true,
+  "license": "MIT",
   "scripts": {
     "build": "tsc --project tsconfig.build.json && node -e \"const fs = require('fs'); fs.copyFileSync('src/assets/index.html', 'build/index.html'); fs.copyFileSync('src/assets/styles.css', 'build/styles.css');\"",
     "dev": "tsc --watch --project tsconfig.build.json & npx http-server ./build -p 8080 -c-1",
