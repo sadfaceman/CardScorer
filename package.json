@@ -7,7 +7,8 @@
     "build": "tsc --project tsconfig.build.json && node -e \"const fs = require('fs'); fs.copyFileSync('src/assets/index.html', 'build/index.html'); fs.copyFileSync('src/assets/styles.css', 'build/styles.css');\"",
     "dev": "tsc --watch --project tsconfig.build.json & npx http-server ./build -p 8080 -c-1",
     "lint": "eslint \"**/*.{ts,js}\"",
-    "test": "jest",
+    "test": "jest --coverage",
+    "test:no-coverage": "jest",
     "start": "npm run build && npm run lint && npx http-server ./build -p 8080 -c-1"
   },
   "devDependencies": {
@@ -16,7 +17,7 @@
     "@typescript-eslint/parser": "^8.57.0",
     "eslint": "^10.0.3",
     "jest": "^30.3.0",
-    "ts-jest": "^29.4.10"
+    "ts-jest": "^29.4.11"
   },
   "overrides": {
     "test-exclude": "^8.0.0"
