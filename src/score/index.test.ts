@@ -35,6 +35,11 @@ describe("calculateScore", () => {
     expect(calculateScore("pilling", 3, 2)).toBe(11);
     expect(calculateScore("pilling", 3, 3)).toBe(16);
   });
+
+  it("should return zero for finishorder and preserve unknown round types", () => {
+    expect(calculateScore("finishorder", 10, 0)).toBe(0);
+    expect(calculateScore("unknown" as any, 7, 0)).toBe(7);
+  });
 });
 
 describe("getWildCardCount", () => {
