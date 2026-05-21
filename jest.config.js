@@ -4,7 +4,16 @@ module.exports = {
   testEnvironment: "node",
   testMatch: ["**/?(*.)+(spec|test).ts"],
   moduleFileExtensions: ["ts", "js", "json"],
+  moduleNameMapper: {
+    "^(\\.{1,2}/.*)\\.js$": "$1"
+  },
   transform: {
     "^.+\\.ts$": ["ts-jest", { tsconfig: "tsconfig.test.json" }]
-  }
+  },
+  collectCoverageFrom: [
+    "src/**/*.ts",
+    "!src/**/*.d.ts"
+  ],
+  coverageDirectory: "coverage",
+  coverageReporters: ["text", "text-summary", "html", "lcov"]
 };
