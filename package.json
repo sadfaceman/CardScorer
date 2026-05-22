@@ -16,11 +16,13 @@
     "@typescript-eslint/eslint-plugin": "^8.57.0",
     "@typescript-eslint/parser": "^8.57.0",
     "eslint": "^10.0.3",
-    "jest": "^30.3.0",
+    "jest": "^30.4.2",
     "jest-environment-jsdom": "^30.4.1",
     "ts-jest": "^29.4.11"
   },
   "overrides": {
-    "test-exclude": "^8.0.0"
+    "test-exclude": "^8.0.0",
+    "glob": "^13.0.0",
+    "jsdom": "^29.0.0"
   }
 }

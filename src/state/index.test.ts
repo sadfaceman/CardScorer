@@ -3,11 +3,16 @@ import { createPlayer, players, roundTypes } from "./index";
 
 describe("state storage", () => {
   let storageMock: Record<string, string>;
+  let originalSessionStorage: Storage;
 
   beforeEach(() => {
     storageMock = {};
-    (globalThis as any).window = {
-      sessionStorage: {
+    originalSessionStorage = window.sessionStorage;
+
+    Object.defineProperty(window, "sessionStorage", {
+      configurable: true,
+      writable: true,
+      value: {
         getItem: (key: string) =>
           key in storageMock ? storageMock[key] : null,
         setItem: (key: string, value: string) => {
@@ -17,12 +22,17 @@ describe("state storage", () => {
           delete storageMock[key];
         },
       },
-    };
+    });
+
     players.splice(0, players.length);
   });
 
   afterEach(() => {
-    delete (globalThis as any).window;
+    Object.defineProperty(window, "sessionStorage", {
+      configurable: true,
+      writable: true,
+      value: originalSessionStorage,
+    });
     players.splice(0, players.length);
   });
 
