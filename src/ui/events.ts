@@ -22,10 +22,15 @@ const calculateButton = document.getElementById(
 const resetButton = document.getElementById(
   "reset-button",
 ) as HTMLButtonElement | null;
+let isShowingPoints = false;
 
 function resetGame() {
   players.splice(0, players.length);
   clearStoredState();
+  isShowingPoints = false;
+  if (calculateButton) {
+    calculateButton.textContent = "Calculate Scores";
+  }
   updateHeader();
   updateScoreboard();
   updateWildCardDisplay();
@@ -71,14 +76,34 @@ export function setupEventListeners() {
         players[playerIdx].scores[roundIdx] = value;
       }
 
+      isShowingPoints = false;
+      if (calculateButton) {
+        calculateButton.textContent = "Calculate Scores";
+      }
+
       saveState();
     });
   }
 
   if (calculateButton) {
     calculateButton.addEventListener("click", () => {
+      if (isShowingPoints) {
+        isShowingPoints = false;
+        calculateButton.textContent = "Calculate Scores";
+        updateScoreboard(false);
+        return;
+      }
+
       const hasWarnings = displayMissingPoints();
-      updateScoreboard(!hasWarnings);
+      if (!hasWarnings) {
+        isShowingPoints = true;
+        calculateButton.textContent = "Edit Scores";
+        updateScoreboard(true);
+      } else {
+        isShowingPoints = false;
+        calculateButton.textContent = "Calculate Scores";
+        updateScoreboard(false);
+      }
     });
   }
 

@@ -99,8 +99,8 @@ describe("events", () => {
   });
 
   it("should render point values when calculate has no warnings", async () => {
-    document.body.innerHTML = '<button id="calculate-button" type="button"></button>';
-    const renderModule = await import("./render");
+    document.body.innerHTML = '<button id="calculate-button" type="button">Calculate Scores</button>';
+    const renderModule = await import("./render.js");
     (renderModule.displayMissingPoints as jest.Mock).mockReturnValue(false);
 
     const { setupEventListeners } = await import("./events");
@@ -111,6 +111,23 @@ describe("events", () => {
 
     expect(renderModule.displayMissingPoints).toHaveBeenCalled();
     expect(renderModule.updateScoreboard).toHaveBeenCalledWith(true);
+    expect(calculateButton?.textContent).toBe("Edit Scores");
+  });
+
+  it("should go back to edit mode when calculate is pressed again after successful calculate", async () => {
+    document.body.innerHTML = '<button id="calculate-button" type="button">Calculate Scores</button>';
+    const renderModule = await import("./render.js");
+    (renderModule.displayMissingPoints as jest.Mock).mockReturnValue(false);
+
+    const { setupEventListeners } = await import("./events");
+    setupEventListeners();
+
+    const calculateButton = document.getElementById("calculate-button");
+    calculateButton?.click();
+    calculateButton?.click();
+
+    expect(renderModule.updateScoreboard).toHaveBeenLastCalledWith(false);
+    expect(calculateButton?.textContent).toBe("Calculate Scores");
   });
 
   it("should handle empty player name", () => {
