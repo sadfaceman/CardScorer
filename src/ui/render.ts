@@ -38,7 +38,7 @@ export function updateWildCardDisplay() {
     wildCount > 0 ? `Wild cards to add: ${wildCount}` : "No wild cards needed.";
 }
 
-export function updateScoreboard() {
+export function updateScoreboard(showPoints = false) {
   if (!scoreRows) {
     return;
   }
@@ -67,7 +67,10 @@ export function updateScoreboard() {
         maxPoints !== Infinity ? Math.max(0, maxPoints - otherSum) : undefined;
       const max = playerMax !== undefined ? `max="${playerMax}"` : "";
 
-      if (roundType === "finishorder") {
+      if (showPoints) {
+        const points = calculateScore(roundType, score, p.scores[7] || 0);
+        row.innerHTML += `<td><div class="score-display">${points}</div></td>`;
+      } else if (roundType === "finishorder") {
         row.innerHTML += `<td><div><input type="number" value="${score}" min="0" max="${players.length}" data-player="${idx}" data-round="${r}" class="finish-order-input" tabindex="0" /></div></td>`;
       } else {
         row.innerHTML += `<td><div><input type="number" value="${score}" min="0" ${max} data-player="${idx}" data-round="${r}" /></div></td>`;
@@ -98,7 +101,7 @@ export function updateScoreboard() {
 export function displayMissingPoints() {
   const container = document.getElementById("missing-points-display");
   if (!container) {
-    return;
+    return false;
   }
 
   container.innerHTML = "";
@@ -158,4 +161,6 @@ export function displayMissingPoints() {
     header.style.margin = "1em 0 0.5em 0";
     container.insertBefore(header, container.firstChild);
   }
+
+  return hasMissingPoints;
 }

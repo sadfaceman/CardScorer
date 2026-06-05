@@ -77,8 +77,8 @@ export function setupEventListeners() {
 
   if (calculateButton) {
     calculateButton.addEventListener("click", () => {
-      updateScoreboard();
-      displayMissingPoints();
+      const hasWarnings = displayMissingPoints();
+      updateScoreboard(!hasWarnings);
     });
   }
 

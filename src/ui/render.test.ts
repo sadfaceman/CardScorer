@@ -1,9 +1,14 @@
-import { players, roundTypes } from "../state/index";
-
 describe("render", () => {
-  beforeEach(() => {
-    // Clear DOM and players
+  let players: Array<{ name: string; scores: number[] }> = [];
+  let roundTypes: string[] = [];
+
+  beforeEach(async () => {
+    jest.resetModules();
     document.body.innerHTML = "";
+
+    const stateModule = await import("../state/index");
+    players = stateModule.players;
+    roundTypes = stateModule.roundTypes;
     players.splice(0, players.length);
   });
 
@@ -66,13 +71,31 @@ describe("render", () => {
       container.id = "missing-points-display";
       document.body.appendChild(container);
 
-      players.push({ name: "Alice", scores: [0, 0, 0, 0, 0, 0, 0, 1] });
-      players.push({ name: "Bob", scores: [0, 0, 0, 0, 0, 0, 0, 1] });
+      players.push({ name: "Alice", scores: [13, 6, 6, 2, 1, 0, 0, 1] });
+      players.push({ name: "Bob", scores: [13, 7, 6, 2, 1, 1, 0, 1] });
 
       const { displayMissingPoints } = await import("./render");
       displayMissingPoints();
 
       expect(container.innerHTML).toContain("Duplicate");
+    });
+
+    it("should render computed point values when requested", async () => {
+      const tableBody = document.createElement("tbody");
+      tableBody.id = "score-rows";
+      document.body.appendChild(tableBody);
+
+      players.push({ name: "Alice", scores: [3, 2, 0, 0, 0, 0, 0, 1] });
+
+      const { updateScoreboard } = await import("./render");
+      updateScoreboard(true);
+
+      const rows = tableBody.querySelectorAll("tr");
+      expect(rows.length).toBeGreaterThan(0);
+
+      const firstRoundCells = rows[0].querySelectorAll("td");
+      expect(firstRoundCells[1].textContent).toBe("6");
+      expect(firstRoundCells[1].querySelector("input")).toBeNull();
     });
   });
 });

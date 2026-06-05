@@ -2,7 +2,7 @@ import { players, createPlayer } from "../state/index";
 import * as storageModule from "../state/storage";
 
 // Mock the render functions
-jest.mock("./render", () => ({
+jest.mock("./render.js", () => ({
   updateHeader: jest.fn(),
   updateScoreboard: jest.fn(),
   updateWildCardDisplay: jest.fn(),
@@ -18,6 +18,7 @@ jest.mock("../state/storage", () => ({
 
 describe("events", () => {
   beforeEach(() => {
+    jest.resetModules();
     // Clear players
     players.splice(0, players.length);
     // Clear all mocks
@@ -95,6 +96,21 @@ describe("events", () => {
     const value = parseInt("NaN", 10) || 0;
 
     expect(value).toBe(0);
+  });
+
+  it("should render point values when calculate has no warnings", async () => {
+    document.body.innerHTML = '<button id="calculate-button" type="button"></button>';
+    const renderModule = await import("./render");
+    (renderModule.displayMissingPoints as jest.Mock).mockReturnValue(false);
+
+    const { setupEventListeners } = await import("./events");
+    setupEventListeners();
+
+    const calculateButton = document.getElementById("calculate-button");
+    calculateButton?.click();
+
+    expect(renderModule.displayMissingPoints).toHaveBeenCalled();
+    expect(renderModule.updateScoreboard).toHaveBeenCalledWith(true);
   });
 
   it("should handle empty player name", () => {
