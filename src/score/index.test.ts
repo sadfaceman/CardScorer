@@ -30,14 +30,16 @@ describe("calculateScore", () => {
     expect(calculateScore("lastset", 1, 0)).toBe(20);
   });
 
-  it("should calculate pilling correctly with finish order", () => {
+  it("should calculate pilling points correctly", () => {
     expect(calculateScore("pilling", 3, 1)).toBe(6);
-    expect(calculateScore("pilling", 3, 2)).toBe(11);
-    expect(calculateScore("pilling", 3, 3)).toBe(16);
+    expect(calculateScore("pilling", 3, 2)).toBe(6);
+    expect(calculateScore("pilling", 3, 3)).toBe(6);
   });
 
-  it("should return zero for finishorder and preserve unknown round types", () => {
-    expect(calculateScore("finishorder", 10, 0)).toBe(0);
+  it("should calculate finishorder bonus correctly", () => {
+    expect(calculateScore("finishorder", 1, 0)).toBe(0);
+    expect(calculateScore("finishorder", 2, 0)).toBe(5);
+    expect(calculateScore("finishorder", 3, 0)).toBe(10);
     expect(calculateScore("unknown" as any, 7, 0)).toBe(7);
   });
 });

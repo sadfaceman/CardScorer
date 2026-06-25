@@ -68,10 +68,7 @@ export function updateScoreboard(showPoints = false) {
       const max = playerMax !== undefined ? `max="${playerMax}"` : "";
 
       if (showPoints) {
-        const points =
-          roundType === "finishorder"
-            ? score
-            : calculateScore(roundType, score, p.scores[7] || 0);
+        const points = calculateScore(roundType, score, p.scores[7] || 0);
         row.innerHTML += `<td><div class="score-display">${points}</div></td>`;
       } else if (roundType === "finishorder") {
         row.innerHTML += `<td><div><input type="number" value="${score}" min="0" max="${players.length}" data-player="${idx}" data-round="${r}" class="finish-order-input" tabindex="0" /></div></td>`;

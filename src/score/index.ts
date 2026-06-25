@@ -17,16 +17,10 @@ export function calculateScore(
       return value * 15;
     case "lastset":
       return value > 0 ? 20 : 0;
-    case "pilling": {
-      let score = value * 2;
-      // finishOrder: 1 = 0 points, >1 = (finishOrder-1)*5
-      if (finishOrder > 1) {
-        score += (finishOrder - 1) * 5;
-      }
-      return score;
-    }
+    case "pilling":
+      return value * 2;
     case "finishorder":
-      return 0; // Finish order is handled separately in the UI
+      return value > 1 ? (value - 1) * 5 : 0;
     default:
       return value;
   }

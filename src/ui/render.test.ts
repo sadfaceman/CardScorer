@@ -99,15 +99,31 @@ describe("render", () => {
 
       const lastRoundCells = rows[7].querySelectorAll("td");
       expect(lastRoundCells[0].textContent).toBe("Solitaire");
-      expect(lastRoundCells[1].textContent).toBe("1");
+      expect(lastRoundCells[1].textContent).toBe("0");
     });
 
-    it("should display 5 points for second place in a two-player pilling round", async () => {
+    it("should render 5 points for second place in the Solitaire round", async () => {
       const tableBody = document.createElement("tbody");
       tableBody.id = "score-rows";
       document.body.appendChild(tableBody);
 
-      players.push({ name: "Alice", scores: [2, 3, 1, 1, 0, 1, 0, 1] });
+      players.push({ name: "Alice", scores: [0, 0, 0, 0, 0, 0, 0, 2] });
+
+      const { updateScoreboard } = await import("./render");
+      updateScoreboard(true);
+
+      const rows = tableBody.querySelectorAll("tr");
+      const solitaireCells = rows[7].querySelectorAll("td");
+      expect(solitaireCells[0].textContent).toBe("Solitaire");
+      expect(solitaireCells[1].textContent).toBe("5");
+    });
+
+    it("should display raw pilling points and separate finishorder bonus in Solitaire", async () => {
+      const tableBody = document.createElement("tbody");
+      tableBody.id = "score-rows";
+      document.body.appendChild(tableBody);
+
+      players.push({ name: "Alice", scores: [2, 3, 1, 1, 0, 1, 1, 1] });
       players.push({ name: "Bob", scores: [1, 2, 0, 0, 1, 0, 0, 2] });
 
       const { updateScoreboard } = await import("./render");
@@ -118,7 +134,13 @@ describe("render", () => {
 
       const pillingCells = rows[6].querySelectorAll("td");
       expect(pillingCells[0].textContent).toBe("# Pass");
-      expect(pillingCells[2].textContent).toBe("5");
+      expect(pillingCells[1].textContent).toBe("2");
+      expect(pillingCells[2].textContent).toBe("0");
+
+      const finishOrderCells = rows[7].querySelectorAll("td");
+      expect(finishOrderCells[0].textContent).toBe("Solitaire");
+      expect(finishOrderCells[1].textContent).toBe("0");
+      expect(finishOrderCells[2].textContent).toBe("5");
     });
   });
 });
