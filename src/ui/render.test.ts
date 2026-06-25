@@ -96,6 +96,10 @@ describe("render", () => {
       const firstRoundCells = rows[0].querySelectorAll("td");
       expect(firstRoundCells[1].textContent).toBe("6");
       expect(firstRoundCells[1].querySelector("input")).toBeNull();
+
+      const lastRoundCells = rows[7].querySelectorAll("td");
+      expect(lastRoundCells[0].textContent).toBe("Solitaire");
+      expect(lastRoundCells[1].textContent).toBe("1");
     });
   });
 });
