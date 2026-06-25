@@ -101,5 +101,24 @@ describe("render", () => {
       expect(lastRoundCells[0].textContent).toBe("Solitaire");
       expect(lastRoundCells[1].textContent).toBe("1");
     });
+
+    it("should display 5 points for second place in a two-player pilling round", async () => {
+      const tableBody = document.createElement("tbody");
+      tableBody.id = "score-rows";
+      document.body.appendChild(tableBody);
+
+      players.push({ name: "Alice", scores: [2, 3, 1, 1, 0, 1, 0, 1] });
+      players.push({ name: "Bob", scores: [1, 2, 0, 0, 1, 0, 0, 2] });
+
+      const { updateScoreboard } = await import("./render");
+      updateScoreboard(true);
+
+      const rows = tableBody.querySelectorAll("tr");
+      expect(rows.length).toBe(9);
+
+      const pillingCells = rows[6].querySelectorAll("td");
+      expect(pillingCells[0].textContent).toBe("# Pass");
+      expect(pillingCells[2].textContent).toBe("5");
+    });
   });
 });

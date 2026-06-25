@@ -130,6 +130,22 @@ describe("events", () => {
     expect(calculateButton?.textContent).toBe("Calculate Scores");
   });
 
+  it("should stay in calculate mode when warnings are present", async () => {
+    document.body.innerHTML = '<button id="calculate-button" type="button">Calculate Scores</button>';
+    const renderModule = await import("./render.js");
+    (renderModule.displayMissingPoints as jest.Mock).mockReturnValue(true);
+
+    const { setupEventListeners } = await import("./events");
+    setupEventListeners();
+
+    const calculateButton = document.getElementById("calculate-button");
+    calculateButton?.click();
+
+    expect(renderModule.displayMissingPoints).toHaveBeenCalled();
+    expect(renderModule.updateScoreboard).toHaveBeenCalledWith(false);
+    expect(calculateButton?.textContent).toBe("Calculate Scores");
+  });
+
   it("should handle empty player name", () => {
     const name = "   ".trim();
 
